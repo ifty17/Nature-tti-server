@@ -19,7 +19,20 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
+async function run(){
 
+    const servicesCollection = client.db('wildPhotoGraphy').collection('services');
+
+    app.get('/homeServices', async(req, res) =>{
+        const query = {};
+        const cursor = servicesCollection.find(query);
+        const services = await cursor.limit(3).toArray();
+        res.send(services);
+    })
+
+
+}
+run().catch(err => console.error(err));
 
 
 
