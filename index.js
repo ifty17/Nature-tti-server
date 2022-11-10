@@ -58,16 +58,37 @@ async function run() {
     });
 
     app.get("/reviews", async (req, res) => {
-      let query = {};
-      if (req.query.serviceId) {
-        query = {
-          serviceId: req.query.serviceId,
-        };
-      }
-      const result = storeReview.find(query);
-      const reviews = await result.toArray();
-      res.send(reviews);
+      console.log(req.query.email)
+       let query = {};
+       if (req.query.email) {
+         query = {
+           email: req.query.email,
+         };
+       }
+       const cursor = storeReview.find(query);
+       const orders = await cursor.toArray();
+       res.send(orders);
     });
+
+    app.get("/reviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const user = await storeReview.findOne(query);
+      res.send(user);
+    });
+
+    // app.patch('/reviews/:id', async(req, res) =>{
+    //   const id = req.params.id;
+    //   const rev = req.body.rev;
+    //   const query = {_id: ObjectId(id)};
+    //   const updatedDoc = {
+    //     $set: {
+    //       rev: rev
+    //     }
+    //   }
+    //   const result = await storeReview.updateOne(query, updatedDoc)
+    //   res.send(result);
+    // })
 
     app.get("/storeReview", async (req, res) => {
       console.log(req.query.serviceId);
