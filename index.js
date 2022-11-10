@@ -49,25 +49,30 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/storeReview", async (req, res) =>{
-      let query = {};
-      if(req.query.email){
-        query = {
-          email: req.query.email
-        }
-      }
-      const cursor = storeReview.find(query);
-      const services = await cursor.toArray();
-      res.send(services);
-    })
-
     app.post("/storeReview", async(req, res) =>{
       const rev = req.body;
       const result = await storeReview.insertOne(rev);
       res.send(result);
     });
 
-    app.delete('/storeReview/:id', async(req, res) =>{
+    app.get("/reviews", async (req, res) => {
+      const query = {};
+      const cursor = storeReview.find(query);
+      const services = await cursor.toArray();
+      res.send(services);
+    });
+
+    app.get("/storeReview", async (req, res) =>{
+      const id = req.query.serviceId;
+      const query = {};
+      const cursor = storeReview.find(query);
+      const result = await cursor.toArray();
+      const serviceId = result.filter(review => review.serviceId === id);
+      res.send(serviceId);
+    })
+
+
+    app.delete('/reviews/:id', async(req, res) =>{
       const id = req.params.id;
       const query = {_id: ObjectId(id)}
       const result = await storeReview.deleteOne(query);
