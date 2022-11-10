@@ -61,6 +61,13 @@ async function run() {
       res.send(result);
     });
 
+    app.delete('/storeReview/:id', async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: ObjectId(id)}
+      const result = await storeReview.deleteOne(query);
+      res.send(result);
+    })
+
   } finally {
   }
 }
